@@ -55,10 +55,13 @@ f.puts vhost_drupal(options)
   end
 
 def self.vhost_drupal(options)
-  if options[:instance] != "dev" || options[:instance] != "stage"
-    subdomain = "#{options[:instance]}-#{options[:client]}.dev"
-  else
+  case options[:instance]
+  when "dev"
     subdomain = "#{options[:client]}.#{options[:instance]}"
+  when "stage"
+    subdomain = "#{options[:client]}.#{options[:instance]}"
+  else
+    subdomain = "#{options[:instance]}-#{options[:client]}.dev"
   end
   full_domain = "#{subdomain}.knectar.com"
 
