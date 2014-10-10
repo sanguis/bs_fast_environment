@@ -44,6 +44,7 @@ root_connect.use(new_db)
   puts "created database: #{new_db}"
   puts "created user:     #{new_db}"
   puts "password:         #{random_password}"
+  puts "value for --db-url: mysql://#{new_db}:#{random_password}@localhost/#{new_db}"
   end
 
 def self.mk_vhost(options)
@@ -77,7 +78,7 @@ def self.vhost_drupal(options)
   puts "The value #{options[:php_version]} is invalid. Please enter 5.3, 5.4 or 5.5 other options will fail."
   exit
   end
-  puts "Creating the vhost file for #{full_domain}. It will run on the php socket #{php_socket}."
+  puts "Creating the vhost file for http://#{full_domain}. It will run on the php socket #{php_socket}."
   return "server {
 #the URL
   server_name #{subdomain}.knectar.com;
