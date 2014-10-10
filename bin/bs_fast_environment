@@ -28,6 +28,8 @@ options = {
 if ARGV.first == nil
   print 'you need to at least enter a client name: '
   options[:client] = gets.chomp
+else
+  options[:client] = ARGV.first
 end
 
 parser = OptionParser.new do|opts|
