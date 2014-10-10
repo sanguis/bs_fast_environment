@@ -24,14 +24,6 @@ options = {
   :private_files => ENV["private_files"]
 }
 
-#checks for client input
-if ARGV.first == nil
-  print 'you need to at least enter a client name: '
-  options[:client] = gets.chomp
-else
-  options[:client] = ARGV.first
-end
-
 parser = OptionParser.new do|opts|
   opts.banner = "new_drupal_app.rb [options]. All settings can be preset in a file called settings.rb"
   opts.on('-i', '--instance instance', "The applications instance name. Defaults to 'dev'. If it is other than stage or dev it the URL will be INSTANCE-CLIENT.dev.knectar.com") do |instance|
@@ -78,6 +70,15 @@ parser = OptionParser.new do|opts|
 end
 
 parser.parse!
+#
+#checks for client input
+if ARGV.first == nil
+  print 'you need to at least enter a client name: '
+  options[:client] = gets.chomp
+else
+  options[:client] = ARGV.first
+end
+
 
 #run the actaul programs
 if operations[:mk_file_system] == true
