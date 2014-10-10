@@ -1,20 +1,13 @@
 #!/usr/bin/env ruby
-#user new_drupal_app.rb CLIENT INSTANCE_NAME FILES
-#will create and prepare directory tree that is relative to where the command
-#was run that looks like 
-# CLIENT/INSTANCE_NAME/FILES
-# files with be chowned to the php user
-# will also create an output new database details
-# will create new branch and deployment role and branch in beanstalk
 
 class Bs_Fast_Envronment
   require 'rubygems'
   require 'securerandom'
 
   def mk_file_system(options, app_template ='drupal')
-    FileUtils.mkdir_p options[:client] + '/' + options[:instance] +'/' + options[:files]
-    FileUtils.chown options[:app_owner], options[:app_owner], options[:client]
-    FileUtils.chown_R options[:app_owner], options[:app_owner], options[:client] + '/' + options[:instance]
+  FileUtils.mkdir_p "#{options[:client]}/#{options[:instance]}/#{options[:files]}"
+  FileUtils.chown options[:app_owner], options[:app_owner], options[:client]
+  FileUtils.chown_R options[:app_owner], options[:app_owner], "#{options[:client]}/#{options[:instance]}"
     begin
       FileUtils.chown_R options[:php_user], options[:app_owner], options[:client] + '/' + options[:instance] +'/' + options[:files] 
     rescue
