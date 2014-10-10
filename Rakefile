@@ -18,7 +18,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/sanguis/bs_fast_environment"
   gem.license = "MIT"
   gem.summary = "a ruby gem that can run on a server and quickly create beanstalk branches and deployment roles, as well as wet up databases and nginx vhosts."
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.description = "a ruby gem that can run on a server and quickly create beanstalk branches and deployment roles, as well as wet up databases and nginx vhosts."
   gem.email = "josh.beauregard@knectar.com"
   gem.authors = ["Josh Beauregard"]
   # dependencies defined in Gemfile
