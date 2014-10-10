@@ -67,6 +67,7 @@ parser = OptionParser.new do|opts|
           "Output all settings") do
     require 'yaml'
     puts YAML::dump(options)
+    exit
   end
   opts.on('-h', '--help', 'Displays help') do
     puts opts

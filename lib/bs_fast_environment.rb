@@ -4,7 +4,7 @@ require 'rubygems'
 
 class Bs_Fast_Envronment
 
-  def mk_file_system(options, app_template ='drupal')
+  def self.mk_file_system(options, app_template ='drupal')
     FileUtils.mkdir_p "#{options[:client]}/#{options[:instance]}/#{options[:files]}"
     FileUtils.chown options[:app_owner], options[:app_owner], options[:client]
     FileUtils.chown_R options[:app_owner], options[:app_owner], "#{options[:client]}/#{options[:instance]}"
@@ -17,12 +17,12 @@ class Bs_Fast_Envronment
     puts "File system prepared"
   end
 
-  def mk_db(options)
+  def self.mk_db(options)
     # making MySQL info
     require "sequel"
     random_password = SecureRandom.hex(20)
-    new_db = options[:client] + '_' + options[:instance]
-    print "what is the mysql " + options[:mysql_user] + "'s password? "
+    new_db = "#{options[:client]}_#{options[:instance]}"
+    print "What is the mysql #{options[:mysql_user]}'s password? "
     sql_password = gets.chomp
 
     puts "you entered : #{sql_password}"
@@ -43,14 +43,15 @@ class Bs_Fast_Envronment
     puts "password:         #{random_password}"
   end
 
-  def mk_vhost(options)
+  def self.mk_vhost(options)
 
     File.open("/etc/nginx/sites-enabled/#{options[:cleint]}_#{options[:instance]}", 'w') do |f|
       f.puts vhost_drupal(options)
     end
-    system sudo service nginx reload
+    system "sudo service nginx reload"
   end
-  def vhost_drupal(options)
+
+  def self.vhost_drupal(options)
     if options[:instance] != "dev" || options[:instance] != "stage"
       subdomain = "#{options[:instance]}-#{options[:client]}.dev"
     else
@@ -81,11 +82,12 @@ class Bs_Fast_Envronment
 
   # setting up new role and pulling from beanstalk
   #require "beanstalkapp"
-  def new_branch(options)
-  end
-  def new_role(options)
-  end
-  def new_server(options)
-  end
+# 
+# def self.new_branch(options)
+# end
+# def self.new_role(options)
+# end
+# def self.new_server(options)
+# end
 
 end
