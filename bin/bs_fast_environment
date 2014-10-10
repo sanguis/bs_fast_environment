@@ -1,15 +1,20 @@
 #!/usr/bin/env ruby
 
-  require 'bs_fast_environment'
+require 'bs_fast_environment'
   require 'dotenv'
   require 'fileutils'
   require 'optparse'
 
-  #load options from local file
-  Dotenv.load
+#load options from local file
 
+  #checks for client input
+  if ARGV.first == nil
+    print 'you need to at least enter a client name: '
+    options[:client] = gets.chomp
+  end
+  Dotenv.load
   options = {
-    :client => ARGV.first,
+    ##:client => ARGV.first,
     :instance => ENV['instance'],
     :files => ENV['files'],
     :php_version => ENV['php_version'],
@@ -68,7 +73,7 @@
     print 'you need to at least enter a client name: '
     options[:client] = gets.chomp
   end
-  
+
   #run the actaul programs
   if operations[:mk_file_system] == true
     Bs_Fast_Envronment.mk_file_system(options)

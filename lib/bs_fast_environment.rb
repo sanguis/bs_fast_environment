@@ -5,9 +5,9 @@ class Bs_Fast_Envronment
   require 'securerandom'
 
   def mk_file_system(options, app_template ='drupal')
-  FileUtils.mkdir_p "#{options[:client]}/#{options[:instance]}/#{options[:files]}"
-  FileUtils.chown options[:app_owner], options[:app_owner], options[:client]
-  FileUtils.chown_R options[:app_owner], options[:app_owner], "#{options[:client]}/#{options[:instance]}"
+    FileUtils.mkdir_p "#{options[:client]}/#{options[:instance]}/#{options[:files]}"
+    FileUtils.chown options[:app_owner], options[:app_owner], options[:client]
+    FileUtils.chown_R options[:app_owner], options[:app_owner], "#{options[:client]}/#{options[:instance]}"
     begin
       FileUtils.chown_R options[:php_user], options[:app_owner], options[:client] + '/' + options[:instance] +'/' + options[:files] 
     rescue
@@ -74,13 +74,12 @@ class Bs_Fast_Envronment
   root /home/sites/#{options[:client]}/#{options[:instance]};
   #include the app template
   set $private_dir #{options[:private_files]};
-  set $php_socket #{php_socket} ;
+  set $php_socket #{php_socket};
   include /etc/nginx/apps/drupal;
 }"
   end
 
   # setting up new role and pulling from beanstalk
-  class Bs
     #require "beanstalkapp"
     def new_branch(options)
     end
@@ -88,6 +87,5 @@ class Bs_Fast_Envronment
     end
     def new_server(options)
     end
-  end
 
 end
