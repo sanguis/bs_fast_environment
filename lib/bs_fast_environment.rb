@@ -1,9 +1,13 @@
 #!/usr/bin/env ruby
 require 'rubygems'
-  require 'securerandom'
+require 'securerandom'
 
 class Bs_Fast_Envronment
 
+  def self.validate_options(options, operations)
+
+  end
+  
   def self.mk_file_system(options, app_template ='drupal')
     FileUtils.mkdir_p "#{options[:client]}/#{options[:instance]}/#{options[:files]}"
     FileUtils.chown options[:app_owner], options[:app_owner], options[:client]
@@ -58,14 +62,14 @@ class Bs_Fast_Envronment
       subdomain = "#{options[:client]}.#{options[:instance]}"
     end
     case options[:php_version]
-    when 5.3
+    when "5.3"
       php_socket = php_fpm
-    when 5.4
+    when "5.4"
       php_socket = php54_fpm
-    when 5.5
+    when "5.5"
       php_socket = php55_fpm
     else 
-      puts "please enter 5.3, 5.4 or 5.5 other options will fail."
+      puts "The value #{options[:php_version]} is invalid. Please enter 5.3, 5.4 or 5.5 other options will fail."
       exit
     end
     return "server {
@@ -82,12 +86,12 @@ class Bs_Fast_Envronment
 
   # setting up new role and pulling from beanstalk
   #require "beanstalkapp"
-# 
-# def self.new_branch(options)
-# end
-# def self.new_role(options)
-# end
-# def self.new_server(options)
-# end
+  # 
+  # def self.new_branch(options)
+  # end
+  # def self.new_role(options)
+  # end
+  # def self.new_server(options)
+  # end
 
 end
