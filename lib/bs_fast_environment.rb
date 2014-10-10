@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
+require 'rubygems'
+  require 'securerandom'
 
 class Bs_Fast_Envronment
-  require 'rubygems'
-  require 'securerandom'
 
   def mk_file_system(options, app_template ='drupal')
     FileUtils.mkdir_p "#{options[:client]}/#{options[:instance]}/#{options[:files]}"
@@ -80,12 +80,12 @@ class Bs_Fast_Envronment
   end
 
   # setting up new role and pulling from beanstalk
-    #require "beanstalkapp"
-    def new_branch(options)
-    end
-    def new_role(options)
-    end
-    def new_server(options)
-    end
+  #require "beanstalkapp"
+  def new_branch(options)
+  end
+  def new_role(options)
+  end
+  def new_server(options)
+  end
 
 end

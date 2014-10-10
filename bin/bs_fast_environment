@@ -5,6 +5,13 @@ require 'dotenv'
 require 'fileutils'
 require 'optparse'
 
+#by default run everything
+operations = {
+  :mk_db => TRUE,
+  :mk_file_system => TRUE,
+  :setup_bs => TRUE,
+  :mk_vhost => TRUE
+}
 #load options from local file
 Dotenv.load
 options = {
@@ -68,10 +75,6 @@ parser = OptionParser.new do|opts|
 end
 
 parser.parse!
-if options[:client] == nil
-  print 'you need to at least enter a client name: '
-  options[:client] = gets.chomp
-end
 
 #run the actaul programs
 if operations[:mk_file_system] == true
