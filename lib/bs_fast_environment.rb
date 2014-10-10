@@ -63,11 +63,11 @@ class Bs_Fast_Envronment
     end
     case options[:php_version]
     when "5.3"
-      php_socket = php_fpm
+      php_socket = "php_fpm"
     when "5.4"
-      php_socket = php54_fpm
+      php_socket = "php54_fpm"
     when "5.5"
-      php_socket = php55_fpm
+      php_socket = "php55_fpm"
     else 
       puts "The value #{options[:php_version]} is invalid. Please enter 5.3, 5.4 or 5.5 other options will fail."
       exit
