@@ -1,0 +1,14 @@
+%YAML 1.2
+---
+:instance: dev
+:files: sites/default/files
+:php_version: '5.4'
+:php_user: apache
+:app_owner: sites
+:mysql_user: root
+:private_files:
+:system_options:
+  - php_versions:
+      - 5.3
+      - 5.4
+      - 5.5

@@ -1,5 +1,4 @@
 source "http://rubygems.org"
-gem 'dotenv'
 gem 'beanstalkapp'
 gem 'sequel'
 group :development do

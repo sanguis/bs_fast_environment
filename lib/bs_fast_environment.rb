@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'securerandom'
-
+require "beanstalkapp"
 class Bs_Fast_Envronment
 
 def self.validate_options(options, operations)
@@ -92,7 +92,6 @@ def self.vhost_drupal(options)
 end
 
 # setting up new role and pulling from beanstalk
-#require "beanstalkapp"
 # 
 # def self.new_branch(options)
 # end
@@ -100,5 +99,11 @@ end
 # end
 # def self.new_server(options)
 # end
-
+#
+def self.is_branch(options)
+end
+def self.is_role(options)
+end
+def self.is_server(options)
+end
 end
