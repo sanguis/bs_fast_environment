@@ -14,7 +14,7 @@ operations = {
 }
 #load options from local file
 
-options YAML::load_file "../bs_fast_enviromnet_settings.yaml"
+options YAML.load_file "../bs_fast_environment_settings.yaml"
 
 #
 # parse ARGV for options
