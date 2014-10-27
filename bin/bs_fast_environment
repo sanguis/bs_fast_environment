@@ -74,14 +74,14 @@ end
 
 
 #run the actaul programs
-if operations[mk_file_system] == true
+if operations[:mk_file_system] == true
   Bs_Fast_Envronment.mk_file_system(options)
 end  
 
-if operations[mk_db]
+if operations[:mk_db]
   Bs_Fast_Envronment.mk_db(options)
 end
 
-if operations[mk_vhost]
+if operations[:mk_vhost]
   Bs_Fast_Envronment.mk_vhost(options)
 end
