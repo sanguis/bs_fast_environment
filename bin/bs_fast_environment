@@ -12,12 +12,12 @@ operations = {
   :setup_bs => TRUE,
   :mk_vhost => TRUE
 }
-
 #load options
-options  = YAML.load_file "#{File.dirname(__FILE__)}/../bs_fast_environment_settings.yaml"
+options = {"client" => nil, "instance"=>"home", "files"=>"sites/default/files", "php_version"=>"5.4", "php_user"=>"apache", "app_owner"=>"sites", "mysql_user"=>"root", "mysql_password"=>nil, "private_files"=>nil, "system_options"=>[{"php_versions"=>[5.3, 5.4, 5.5]}]}
 
 #override options
 options_files = [
+  "#{File.dirname(__FILE__)}/../bs_fast_environment_settings.yaml",
   "/etc/bs_fast_environment_settings.yaml",
   "#{ENV['HOME']}/.bs_fast_environment_settings.yaml"
 ]
@@ -78,9 +78,9 @@ parser.parse!
 #checks for client input
 if ARGV.first == nil
   print 'you need to at least enter a client name '
-  options[client] = gets.chomp
+  options["client"] = gets.chomp
 else
-  options[client] = ARGV.first
+  options["client"] = ARGV.first
 end
 
 
