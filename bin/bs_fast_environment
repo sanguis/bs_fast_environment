@@ -10,50 +10,50 @@ operations = {
   :mk_db => TRUE,
   :mk_file_system => TRUE,
   :setup_bs => TRUE,
-  :mk_vhost => TRUEjjj
+  :mk_vhost => TRUE
 }
 #load options from local file
 
-options YAML.load_file "../bs_fast_environment_settings.yaml"
+options  = YAML.load_file "#{File.dirname(__FILE__)}/../bs_fast_environment_settings.yaml"
 
 #
 # parse ARGV for options
 parser = OptionParser.new do|opts|
   opts.banner = "new_drupal_app.rb [options]. All settings can be preset in a file called settings.rb"
   opts.on('-i', '--instance instance', "The applications instance name. Defaults to 'dev'. If it is other than stage or dev it the URL will be INSTANCE-CLIENT.dev.knectar.com") do |instance|
-    options[:instance] = instance
+    options[instance] = instance
   end
   opts.on('-f', '--files path', 'Path to Drupal files directory') do |files|
-    options[:files] = files;
+    options[files] = files;
   end 
   opts.on( "-r", "--private_files private_files", "The Drupal private files directory. Defaults to /sites/default/files/_private") do |opt|
-    options[:private_files]  = opt
+    options[private_files]  = opt
   end
   opts.on('-p', '--php_version php_version', 'can be "5.3", "5.4", "5.5". Defaults to 5.4') do |ver|
-    options[:php_version] = ver;
+    options[php_version] = ver;
   end
   opts.on( "-u", "--php_user",
           "the user that php runs as") do |opt|
-    options[:php_user] = opt
+    options[php_user] = opt
   end
   opts.on( "-o", "--owner app owner", "The UNIX level owner that the application will live under, can be hard set in the settings") do |opt| 
-    options[:app_owner] = opt;
+    options[app_owner] = opt;
   end
   opts.on( "-M", "--no-db no-db", "Do not create database") do
-    operations[:mk_db] = FALSE
+    operations[mk_db] = FALSE
   end
   opts.on( "-F", "--no-directory no-directory", "Do not create directory structure") do
-    operations[:mk_file_system] = FALSE
+    operations[mk_file_system] = FALSE
   end
   opts.on( "-B", "--no-beanstalk", "Do not create beanstalk environment.") do 
-    operations[:setup_bs] = FALSE
+    operations[setup_bs] = FALSE
   end
   opts.on( "-V", "--no-vhost no-vhost", "Do not create an Nginx virtual host for this application instance.") do
-    operations[:create_vhost] = FALSE
+    operations[create_vhost] = FALSE
   end
   opts.on( "-O", "--options",
           "Output all settings") do
-    puts YAML::dump(options)
+    puts YAML.dump(options)
     exit
   end
   opts.on('-h', '--help', 'Displays help') do
@@ -63,25 +63,25 @@ parser = OptionParser.new do|opts|
 end
 
 parser.parse!
-#
+
 #checks for client input
 if ARGV.first == nil
-  print 'you need to at least enter a client name: '
-  options[:client] = gets.chomp
+  print 'you need to at least enter a client name '
+  options[client] = gets.chomp
 else
-  options[:client] = ARGV.first
+  options[client] = ARGV.first
 end
 
 
 #run the actaul programs
-if operations[:mk_file_system] == true
+if operations[mk_file_system] == true
   Bs_Fast_Envronment.mk_file_system(options)
 end  
 
-if operations[:mk_db]
+if operations[mk_db]
   Bs_Fast_Envronment.mk_db(options)
 end
 
-if operations[:mk_vhost]
+if operations[mk_vhost]
   Bs_Fast_Envronment.mk_vhost(options)
 end
