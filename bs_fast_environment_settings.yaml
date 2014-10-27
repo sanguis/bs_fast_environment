@@ -4,6 +4,7 @@ php_version: '5.4'
 php_user: apache
 app_owner: sites
 mysql_user: root
+mysql_password:
 private_files:
 system_options:
   - php_versions:

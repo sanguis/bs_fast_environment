@@ -40,16 +40,16 @@ parser = OptionParser.new do|opts|
     options[app_owner] = opt;
   end
   opts.on( "-M", "--no-db no-db", "Do not create database") do
-    operations[mk_db] = FALSE
+    operations[:mk_db] = FALSE
   end
   opts.on( "-F", "--no-directory no-directory", "Do not create directory structure") do
-    operations[mk_file_system] = FALSE
+    operations[:mk_file_system] = FALSE
   end
   opts.on( "-B", "--no-beanstalk", "Do not create beanstalk environment.") do 
-    operations[setup_bs] = FALSE
+    operations[:setup_bs] = FALSE
   end
   opts.on( "-V", "--no-vhost no-vhost", "Do not create an Nginx virtual host for this application instance.") do
-    operations[create_vhost] = FALSE
+    operations[:create_vhost] = FALSE
   end
   opts.on( "-O", "--options",
           "Output all settings") do
