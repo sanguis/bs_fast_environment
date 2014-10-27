@@ -37,7 +37,7 @@ class Bs_Fast_Envronment
       root_connect.use(new_db)
     rescue 
       root_connect.run("CREATE DATABASE #{new_db};")
-      root_connect.run("GRANT USAGE ON '#{new_db}'.* TO '#{new_db}' @ 'localhost' IDENTIFIED BY '#{random_password}'")
+      root_connect.run("GRANT USAGE ON '#{new_db}'.* TO '#{new_db}'@'localhost' IDENTIFIED BY '#{random_password}'")
       root_connect.run("GRANT ALL ON #{new_db}.* TO '#{new_db}'@'localhost'")
     end
 
