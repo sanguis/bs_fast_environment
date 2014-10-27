@@ -1,5 +1,6 @@
 source "http://rubygems.org"
 gem 'beanstalkapp'
+gem 'mysql'
 gem 'sequel'
 group :development do
   gem "shoulda", ">= 0"
