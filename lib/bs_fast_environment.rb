@@ -50,9 +50,9 @@ class Bs_Fast_Envronment
     puts "value for --db-url: mysql://#{new_db}:#{random_password}@localhost/#{new_db}"
   end
 
-  def self.mk_vhost(options, app)
+  def self.mk_vhost(options, app = 'drupal')
 
-    File.open("/etc/nginx/sites-enabled/#{options[cleint]}_#{options["instance"]}", 'w') do |f|
+    File.open("/etc/nginx/sites-enabled/#{options["client"]}_#{options["instance"]}", 'w') do |f|
       f.puts vhost_drupal(options)
     end
     system "sudo service nginx reload"
