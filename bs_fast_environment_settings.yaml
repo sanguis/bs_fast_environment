@@ -6,6 +6,10 @@ app_owner: sites
 mysql_user: root
 mysql_password:
 private_files:
+beanstalkapp:
+  - domain:
+  - user:
+  - password:
 system_options:
   - php_versions:
       - 5.3
