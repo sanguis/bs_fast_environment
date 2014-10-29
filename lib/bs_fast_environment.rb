@@ -94,6 +94,13 @@ class Bs_Fast_Envronment
 }"
   end
 
+  Beansalk.API.Base.Setup(
+    :domain   => options['beanstalkapp']['domain']
+    :login    => "login",
+    :password => "password"
+  )
+
+  Beanstalk::API::Account.find
   # setting up new role and pulling from beanstalk
   # 
   # def self.new_branch(options)
@@ -103,6 +110,7 @@ class Bs_Fast_Envronment
   # def self.new_server(options)
   # end
   #
+
   def self.is_branch(options)
   end
   def self.is_role(options)
