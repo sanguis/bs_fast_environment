@@ -52,7 +52,7 @@ class Bs_Fast_Envronment
 
   def self.mk_vhost(options, app = 'drupal')
 
-    File.open("/etc/nginx/sites-enabled/#{options["client"]}_#{options["instance"]}", 'w') do |f|
+    File.open("/etc/nginx/sites-enabled/#{options["client"]}_#{options["instance"]}", 'w+') do |f|
       f.puts vhost_drupal(options)
     end
     system "sudo service nginx reload"
@@ -93,28 +93,25 @@ class Bs_Fast_Envronment
   include /etc/nginx/apps/drupal;
 }"
   end
-
-  Beansalk.API.Base.Setup(
-    :domain   => options['beanstalkapp']['domain']
-    :login    => "login",
-    :password => "password"
-  )
-
-  Beanstalk::API::Account.find
-  # setting up new role and pulling from beanstalk
-  # 
-  # def self.new_branch(options)
-  # end
-  # def self.new_role(options)
-  # end
-  # def self.new_server(options)
-  # end
-  #
-
-  def self.is_branch(options)
-  end
-  def self.is_role(options)
-  end
-  def self.is_server(options)
+  
+  # fork or detect existing branch by the name of options["instance"] from default branch
+  # deploy code in to newly created file system
+  def self.bs_deploy_code(options) 
+   
+    
+    options['beanstalkapp'].each do |k|
+      puts k.to_hash
+      k.each_pair do |key,value|
+        puts "#{'key'} = #{value}"
+      end
+    end
+=begin
+    Beanstalk::API::Base.Setup(
+      :domain   => options['beanstalkapp'].first['domain'],
+      :login    => options['beanstalkapp'].first['user'],
+      :password => options["beanstalkapp"].first["password"]
+    )
+puts    Beanstalk::API::Account.find
+=end
   end
 end

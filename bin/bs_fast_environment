@@ -13,15 +13,7 @@ operations = {
   :mk_vhost => TRUE
 }
 #load options
-options = {"client" => nil, "instance"=>"home", "files"=>"sites/default/files", "php_version"=>"5.4", "php_user"=>"apache", "app_owner"=>"sites", "mysql_user"=>"root", "mysql_password"=>nil, "private_files"=>nil,
-  "beanstalkapp" => [
-    "domain" => nil,
-    "user" => nil,
-    "password" => nil,
-  ],
-  "system_options"=>[{"php_versions"=>[5.3, 5.4, 5.5]}]
-}
-
+options = Hash.new(0)
 #override options
 options_files = [
   "#{File.dirname(__FILE__)}/../bs_fast_environment_settings.yaml",
@@ -38,7 +30,7 @@ end
 # parse ARGV for options
 parser = OptionParser.new do|opts|
   opts.banner = "new_drupal_app.rb [options]. All settings can be preset in a file called settings.rb"
-  opts.on('-i', '--instance instance', "The applications instance name. Defaults to 'dev'. If it is other than stage or dev it the URL will be INSTANCE-CLIENT.dev.knectar.com") do |instance|
+  opts.on('-i', '--instance instance', "The applications instance name. Defaults to 'dev'. If it is other than stage or dev it the URL will be INSTANCE") do |instance|
     options[instance] = instance
   end
   opts.on('-f', '--files path', 'Path to Drupal files directory') do |files|
@@ -69,8 +61,7 @@ parser = OptionParser.new do|opts|
   opts.on( "-V", "--no-vhost no-vhost", "Do not create an Nginx virtual host for this application instance.") do
     operations[:create_vhost] = FALSE
   end
-  opts.on( "-O", "--options",
-          "Output all settings") do
+  opts.on( "-O", "--options", "Output all settings") do
     puts YAML.dump(options)
     exit
   end
@@ -92,7 +83,7 @@ end
 
 
 #run the actaul programs
-if operations[:mk_file_system] == true
+if operations[:mk_file_system]
   Bs_Fast_Envronment.mk_file_system(options)
 end  
 
@@ -102,4 +93,8 @@ end
 
 if operations[:mk_vhost]
   Bs_Fast_Envronment.mk_vhost(options)
+end
+
+if operations[:setup_bs]
+  Bs_Fast_Envronment.bs_deploy_code(options)   
 end
