@@ -98,20 +98,18 @@ class Bs_Fast_Envronment
   # deploy code in to newly created file system
   def self.bs_deploy_code(options) 
    
-    
+    bs= Hash.new
     options['beanstalkapp'].each do |k|
-      puts k.to_hash
-      k.each_pair do |key,value|
-        puts "#{'key'} = #{value}"
+      k.to_hash.each_pair do |key,value|
+        bs["#{key}"] = value
       end
     end
-=begin
+    p bs
     Beanstalk::API::Base.Setup(
-      :domain   => options['beanstalkapp'].first['domain'],
-      :login    => options['beanstalkapp'].first['user'],
-      :password => options["beanstalkapp"].first["password"]
+      :domain   => bs['domain'],
+      :login    => bs['login'],
+      :password => bs['password']
     )
 puts    Beanstalk::API::Account.find
-=end
   end
 end
