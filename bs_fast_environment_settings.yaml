@@ -5,6 +5,7 @@ php_user: apache
 app_owner: sites
 mysql_user: root
 mysql_password:
+sites_parent_dir: /srv/www
 private_files:
 beanstalkapp:
   - domain:

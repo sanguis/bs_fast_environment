@@ -1,21 +1,21 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'securerandom'
-require "beanstalkapp"
+# require "beanstalkapp"
 class Bs_Fast_Envronment
 
   def self.validate_options(options, operations)
   end
 
   def self.mk_file_system(options, app='drupal')
-    FileUtils.mkdir_p "#{options["client"]}/#{options["instance"]}/#{options["files"]}"
-    FileUtils.chown options["app_owner"], options["app_owner"], options["client"]
-    FileUtils.chown_R options["app_owner"], options["app_owner"], "#{options["client"]}/#{options["instance"]}"
+    FileUtils.mkdir_p "#{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]}/#{options["files"]}"
+    FileUtils.chown options["app_owner"], options["app_owner"], "#{options["sites_parent_dir"]}/#{options["client"]}"
+    FileUtils.chown_R options["app_owner"], options["app_owner"], "#{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]}"
     begin
-      FileUtils.chown_R options["php_user"], options["app_owner"], options["client"] + '/' + options["instance"] +'/' + options["files"] 
+      FileUtils.chown_R options["php_user"], options["app_owner"], "#{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]}/#{options["files"]}"
     rescue
       puts "Can not change 'files' directory owner to #{options["php_user"]}.\n Please enter sudoers password:"
-      system("sudo chown -R #{options["php_user"]}:#{options["app_owner"]} #{options["client"]}/#{options["instance"]}/#{options["files"]}")
+      system("sudo chown -R #{options["php_user"]}:#{options["app_owner"]} #{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]}/#{options["files"]}")
     end
     puts "File system prepared"
   end
@@ -86,7 +86,7 @@ class Bs_Fast_Envronment
 #the URL
   server_name #{subdomain}.knectar.com;
 #path to the local host
-  root /home/sites/#{options["client"]}/#{options["instance"]};
+  root #{options["sites_parent_dir"}/#{options["client"]}/#{options["instance"]};
 #include the app template
   set $private_dir #{options["private_files"]};
   set $php_socket #{php_socket};
