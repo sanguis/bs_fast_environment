@@ -86,7 +86,7 @@ class Bs_Fast_Envronment
 #the URL
   server_name #{subdomain}.knectar.com;
 #path to the local host
-  root #{options["sites_parent_dir"}/#{options["client"]}/#{options["instance"]};
+  root #{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]};
 #include the app template
   set $private_dir #{options["private_files"]};
   set $php_socket #{php_socket};
