@@ -24,7 +24,7 @@ class Bs_Fast_Envronment
     # making MySQL info
     require "sequel"
     random_password = SecureRandom.hex(20)
-    new_db = "#{options["client"]}_#{options["instance"]}"
+    new_db = "#{options["client"].gsub(/-/,'_')}_#{options["instance"]}"
     if options["mysql_password"] == nil
       print "What is the mysql #{options["mysql_user"]}'s password? "
       sql_password = gets.chomp
@@ -37,8 +37,8 @@ class Bs_Fast_Envronment
       root_connect.use(new_db)
     rescue 
       root_connect.run("CREATE DATABASE #{new_db};")
-      root_connect.run("GRANT USAGE ON '#{new_db}'.* TO '#{new_db}'@'localhost' IDENTIFIED BY '#{random_password}'")
-      root_connect.run("GRANT ALL ON #{new_db}.* TO '#{new_db}'@'localhost'")
+      root_connect.run("GRANT USAGE ON #{new_db}.* TO #{new_db}@localhost IDENTIFIED BY '#{random_password}'")
+      root_connect.run("GRANT ALL ON #{new_db}.* TO #{new_db}@localhost")
     end
 
     root_connect.disconnect
