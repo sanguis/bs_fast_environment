@@ -59,7 +59,7 @@ parser = OptionParser.new do|opts|
     operations[:setup_bs] = FALSE
   end
   opts.on( "-V", "--no-vhost no-vhost", "Do not create an Nginx virtual host for this application instance.") do
-    operations[:create_vhost] = FALSE
+    operations[:mk_vhost] = FALSE
   end
   opts.on( "-O", "--options", "Output all settings") do
     puts YAML.dump(options)
