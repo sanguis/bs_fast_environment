@@ -26,7 +26,6 @@ options_files.each do |options_file|
     options = options.merge(YAML.load_file options_file)
   end
 end
-p options
 # parse ARGV for options
 parser = OptionParser.new do|opts|
   opts.banner = "new_drupal_app.rb [options]. All settings can be preset in a file called settings.rb"
