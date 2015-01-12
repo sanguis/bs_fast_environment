@@ -1,12 +1,65 @@
 = bs_fast_environment
 
-* user new_drupal_app.rb CLIENT INSTANCE_NAME FILES
-* will create and prepare directory tree that is relative to where the command
-* was run that looks like 
-* CLIENT/INSTANCE_NAME/FILES
-* files with be chowned to the php user
-* will also create an output new database details
-* will create new branch and deployment role and branch in beanstalk
+== overview
+This is a cli tool that I have written to speed up the process of making and configuring a vhost/db/user and prepping the file system for drupal deployment
+
+It is a ruby gem the code base is at https://github.com/sanguis/bs_fast_environment feel free to make pull requests.
+
+=== Initial Goals
+* Create Drupal file structure
+* create db and provide unique access credentials. (Already returns a drush site-install url string
+* Create vhost file (and reload nginx)
+* todo: add stock enviroments and urls.
+* todo: If an old url is included it will also listen for that.
+* todo: Create new or clone , branch for instance
+* todo: Deployment
+* todo: create new role if needed
+* todo: create new server
+* todo: deploy files.
+* todo: run drush site-install to populate settings.php. This tests base drupal functionality as a bonus.
+Future goals not in this phase.
+Include other app file and vhost installs
+Daniel and I have already  created an app template for magento but it currently is hard coded to drupal.
+Auto fetch prod assets
+Create setup function.
+append custom vars to the drupal settings.php
+Setup
+In your browser go to https://knectar.beanstalkapp.com/access_tokens genreate a new access token
+run
+ bs_fast_environment -O >  ~/.bs_fast_environment_settings.yaml
+(nano|vim) ~/.bs_fast_environment_settings.yaml
+in the beanstalk settings  add your user name and use the generated token for a password.
+Use
+must run as sudo 
+getting help
+bs_fast_environment -h
+currently outputs:
+@@@
+  -i, --instance instance          The applications instance name. Defaults to 'dev'. If it is other than stage or dev it the URL will be INSTANCE-CLIENT.dev.knectar.com
+    -f, --files path                 Path to Drupal files directory
+    -r private_files,                The Drupal private files directory. Defaults to /sites/default/files/_private
+        --private_files
+    -p, --php_version php_version    can be "5.3", "5.4", "5.5". Defaults to 5.4
+    -u, --php_user                   the user that php runs as
+    -o, --owner app owner            The UNIX level owner that the application will live under, can be hard set in the settings
+    -M, --no-db no-db                Do not create database
+    -F, --no-directory no-directory  Do not create directory structure
+    -B, --no-beanstalk               Do not create beanstalk environment.
+    -V, --no-vhost no-vhost          Do not create an Nginx virtual host for this application instance.
+    -O, --options                    Output all settings
+    -h, --help                       Displays help
+@@@
+
+Currently recommended string.
+go to /srv/www
+sudo bs_fast_environment -i INSTANCETYPE -B CLIENTNAME
+
+Note that currently instance type will default to whatever its set to in the ~/.bs_fast_environment_settings.yaml file created above. use -O to 
+
+it will create every return a db-url value for drush si
+
+Due the the beanstalk integration incompleteness atm you will need to create the deployment role/server for this manually
+
 
 
 == Contributing to bs_fast_environment
@@ -21,6 +74,6 @@
 
 == Copyright
 
-Copyright (c) 2014 Josh Beauregard. See LICENSE.txt for
+Copyright (c) 2014 Knectar and Josh Beauregard. See LICENSE.txt for
 further details.
 

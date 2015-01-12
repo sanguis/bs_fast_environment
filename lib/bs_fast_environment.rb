@@ -90,6 +90,7 @@ class Bs_Fast_Envronment
 #include the app template
   set $private_dir #{options["private_files"]};
   set $php_socket #{php_socket};
+  include /etc/nginx/apps/password.conf;
   include /etc/nginx/apps/drupal;
 }"
   end
