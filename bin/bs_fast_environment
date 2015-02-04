@@ -17,13 +17,19 @@ options = Hash.new(0)
 #override options
 options_files = [
   "#{File.dirname(__FILE__)}/../bs_fast_environment_settings.yaml",
-  "/etc/bs_fast_environment_settings.yaml",
-  "#{ENV['HOME']}/.bs_fast_environment_settings.yaml"
+  "/etc/bs_fast_environment_settings.yaml"
 ]
+if ENV.has_key?("SUDO_USER")
+  options_files << "/home/#{ENV['SUDO_USER']}/.bs_fast_environment_settings.yaml"
+end
 
 options_files.each do |options_file|
   if File.exists?(options_file)
+    begin
     options = options.merge(YAML.load_file options_file)
+    rescue
+      p "WARNING: Loading #{options_file} failed. you might want to create it" 
+    end
   end
 end
 # parse ARGV for options
@@ -62,6 +68,11 @@ parser = OptionParser.new do|opts|
   end
   opts.on( "-O", "--options", "Output all settings") do
     puts YAML.dump(options)
+    exit
+  end
+  opts.on("-Y", "--yaml", "List YAML files used to Create default options") do
+    puts "Options pulled from the settings files:\n"
+    p options_files
     exit
   end
   opts.on('-h', '--help', 'Displays help') do
