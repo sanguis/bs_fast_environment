@@ -21,14 +21,16 @@ options_files = [
 ]
 if ENV.has_key?("SUDO_USER")
   options_files << "/home/#{ENV['SUDO_USER']}/.bs_fast_environment_settings.yaml"
+else
+  options_files << "#{ENV['HOME']}/.bs_fast_environment_settings.yaml"
 end
 
 options_files.each do |options_file|
   if File.exists?(options_file)
     begin
-    options = options.merge(YAML.load_file options_file)
+    options = options.merge!(YAML.load_file options_file)
     rescue
-      p "WARNING: Loading #{options_file} failed. you might want to create it" 
+      p "WARNING: Loading #{options_file} failed. You might want to create it" 
     end
   end
 end
@@ -44,7 +46,7 @@ parser = OptionParser.new do|opts|
   opts.on( "-r", "--private_files private_files", "The Drupal private files directory. Defaults to /sites/default/files/_private") do |opt|
     options["private_files"]  = opt
   end
-  opts.on('-p', '--php_version php_version', 'can be "5.3", "5.4", "5.5". Defaults to 5.4') do |ver|
+  opts.on('-p', '--php_version php_version', 'can be "5.3", "5.4", "5.5". Defaults to #{options["php_version"]}') do |ver|
     options["php_version"] = ver;
   end
   opts.on( "-u", "--php_user",

@@ -82,15 +82,23 @@ class Bs_Fast_Envronment
       exit
     end
     puts "Creating the vhost file for http://#{full_domain}. It will run on the php socket #{php_socket}."
+    
+    # private files
+    private_files = if options["private_files"].nil?
+                      '""'
+                    else
+                      options["private_files"]
+                    end
+
     return "server {
 #the URL
   server_name #{subdomain}.knectar.com;
 #path to the local host
   root #{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]};
 #include the app template
-  set $private_dir #{options["private_files"]};
+  set $private_dir #{private_files};
   set $php_socket #{php_socket};
-  include /etc/nginx/apps/password.conf;
+  include /etc/nginx/password.conf;
   include /etc/nginx/apps/drupal;
 }"
   end
