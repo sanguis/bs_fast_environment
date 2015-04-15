@@ -1,5 +1,4 @@
 source "http://rubygems.org"
-gem 'beanstalkapp', '~> 1.6', '>= 1.6.1'
 gem 'mysql', '~> 2.9', '>= 2.9.1'
 gem 'sequel', '~> 4.19', '>= 4.19.0'
 gem 'rest-client', '~> 1.7.2'
