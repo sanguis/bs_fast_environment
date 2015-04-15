@@ -1,10 +1,18 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'securerandom'
-require 'bs_rest_api_helper.rb'
 
 class Bs_Fast_Envronment
   def initialize(options)
+    case options["instance"]
+    when "dev"
+      subdomain = "#{options["client"]}.#{options["instance"]}"
+    when "stage"
+      subdomain = "#{options["client"]}.#{options["instance"]}"
+    else
+      subdomain = "#{options["instance"]}-#{options["client"]}.dev"
+    end
+    @full_domain = "#{subdomain}.knectar.com"
     @options = options
   end
 
@@ -60,16 +68,7 @@ class Bs_Fast_Envronment
   end
 
   def self.vhost_drupal()
-    case @options["instance"]
-    when "dev"
-      subdomain = "#{@options["client"]}.#{@options["instance"]}"
-    when "stage"
-      subdomain = "#{@options["client"]}.#{@options["instance"]}"
-    else
-      subdomain = "#{@options["instance"]}-#{@options["client"]}.dev"
-    end
-    full_domain = "#{subdomain}.knectar.com"
-
+   
     # setting the php version;
     case @options["php_version"]
     when "5.3"
@@ -107,6 +106,7 @@ class Bs_Fast_Envronment
   # fork or detect existing branch by the name of @options["instance"] from default branch
   # deploy code in to newly created file system
   def self.bs_deploy_code() 
+require 'bs_rest_api_helper.rb'
    
     bs= Hash.new
     @options['beanstalkapp'].each do |k|
@@ -114,5 +114,6 @@ class Bs_Fast_Envronment
         bs["#{key}"] = value
       end
     end
+
   end
 end
