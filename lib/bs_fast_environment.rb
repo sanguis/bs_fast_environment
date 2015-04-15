@@ -4,36 +4,36 @@ require 'securerandom'
 require 'bs_rest_api_helper.rb'
 
 class Bs_Fast_Envronment
-
-  def self.validate_options(options, operations)
+  def initialize(options)
+    @options = options
   end
 
-  def self.mk_file_system(options, app='drupal')
-    FileUtils.mkdir_p "#{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]}/#{options["files"]}"
-    FileUtils.chown options["app_owner"], options["app_owner"], "#{options["sites_parent_dir"]}/#{options["client"]}"
-    FileUtils.chown_R options["app_owner"], options["app_owner"], "#{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]}"
+  def self.mk_file_system(app='drupal')
+    FileUtils.mkdir_p "#{@options["sites_parent_dir"]}/#{@options["client"]}/#{@options["instance"]}/#{@options["files"]}"
+    FileUtils.chown @options["app_owner"], @options["app_owner"], "#{@options["sites_parent_dir"]}/#{@options["client"]}"
+    FileUtils.chown_R @options["app_owner"], @options["app_owner"], "#{@options["sites_parent_dir"]}/#{@options["client"]}/#{@options["instance"]}"
     begin
-      FileUtils.chown_R options["php_user"], options["app_owner"], "#{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]}/#{options["files"]}"
+      FileUtils.chown_R @options["php_user"], @options["app_owner"], "#{@options["sites_parent_dir"]}/#{@options["client"]}/#{@options["instance"]}/#{@options["files"]}"
     rescue
-      puts "Can not change 'files' directory owner to #{options["php_user"]}.\n Please enter sudoers password:"
-      system("sudo chown -R #{options["php_user"]}:#{options["app_owner"]} #{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]}/#{options["files"]}")
+      puts "Can not change 'files' directory owner to #{@options["php_user"]}.\n Please enter sudoers password:"
+      system("sudo chown -R #{@options["php_user"]}:#{@options["app_owner"]} #{@options["sites_parent_dir"]}/#{@options["client"]}/#{@options["instance"]}/#{@options["files"]}")
     end
     puts "File system prepared"
   end
 
-  def self.mk_db(options)
+  def self.mk_db()
     # making MySQL info
     require "sequel"
     random_password = SecureRandom.hex(20)
-    new_db = "#{options["client"].gsub(/-/,'_')}_#{options["instance"]}"
-    if options["mysql_password"] == nil
-      print "What is the mysql #{options["mysql_user"]}'s password? "
+    new_db = "#{@options["client"].gsub(/-/,'_')}_#{@options["instance"]}"
+    if @options["mysql_password"] == nil
+      print "What is the mysql #{@options["mysql_user"]}'s password? "
       sql_password = gets.chomp
     else
-      sql_password = options["mysql_password"]
+      sql_password = @options["mysql_password"]
     end
 
-    root_connect = Sequel.connect("mysql://#{options["mysql_user"]}:#{sql_password}@localhost")
+    root_connect = Sequel.connect("mysql://#{@options["mysql_user"]}:#{sql_password}@localhost")
     begin
       root_connect.use(new_db)
     rescue 
@@ -51,27 +51,27 @@ class Bs_Fast_Envronment
     puts "value for --db-url: mysql://#{new_db}:#{random_password}@localhost/#{new_db}"
   end
 
-  def self.mk_vhost(options, app = 'drupal')
+  def self.mk_vhost(app = 'drupal')
 
-    File.open("/etc/nginx/sites-enabled/#{options["client"]}_#{options["instance"]}", 'w+') do |f|
-      f.puts vhost_drupal(options)
+    File.open("/etc/nginx/sites-enabled/#{@options["client"]}_#{@options["instance"]}", 'w+') do |f|
+      f.puts vhost_drupal(@options)
     end
     system "sudo service nginx reload"
   end
 
-  def self.vhost_drupal(options)
-    case options["instance"]
+  def self.vhost_drupal()
+    case @options["instance"]
     when "dev"
-      subdomain = "#{options["client"]}.#{options["instance"]}"
+      subdomain = "#{@options["client"]}.#{@options["instance"]}"
     when "stage"
-      subdomain = "#{options["client"]}.#{options["instance"]}"
+      subdomain = "#{@options["client"]}.#{@options["instance"]}"
     else
-      subdomain = "#{options["instance"]}-#{options["client"]}.dev"
+      subdomain = "#{@options["instance"]}-#{@options["client"]}.dev"
     end
     full_domain = "#{subdomain}.knectar.com"
 
     # setting the php version;
-    case options["php_version"]
+    case @options["php_version"]
     when "5.3"
       php_socket = "php-fpm"
     when "5.4"
@@ -79,23 +79,23 @@ class Bs_Fast_Envronment
     when "5.5"
       php_socket = "php55-fpm"
     else 
-      puts "The value #{options["php_version"]} is invalid. Please enter 5.3, 5.4 or 5.5 other options will fail."
+      puts "The value #{@options["php_version"]} is invalid. Please enter 5.3, 5.4 or 5.5 other @options will fail."
       exit
     end
     puts "Creating the vhost file for http://#{full_domain}. It will run on the php socket #{php_socket}."
     
     # private files
-    private_files = if options["private_files"].nil?
+    private_files = if @options["private_files"].nil?
                       '""'
                     else
-                      options["private_files"]
+                      @options["private_files"]
                     end
 
     return "server {
 #the URL
   server_name #{subdomain}.knectar.com;
 #path to the local host
-  root #{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]};
+  root #{@options["sites_parent_dir"]}/#{@options["client"]}/#{@options["instance"]};
 #include the app template
   set $private_dir #{private_files};
   set $php_socket #{php_socket};
@@ -104,12 +104,12 @@ class Bs_Fast_Envronment
 }"
   end
   
-  # fork or detect existing branch by the name of options["instance"] from default branch
+  # fork or detect existing branch by the name of @options["instance"] from default branch
   # deploy code in to newly created file system
-  def self.bs_deploy_code(options) 
+  def self.bs_deploy_code() 
    
     bs= Hash.new
-    options['beanstalkapp'].each do |k|
+    @options['beanstalkapp'].each do |k|
       k.to_hash.each_pair do |key,value|
         bs["#{key}"] = value
       end

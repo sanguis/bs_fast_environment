@@ -85,7 +85,6 @@ class BsRestApiHelper
           }
         }
       end
-        p "#{@project_url}releases.json?environment_id=#{env['id']}"
       new_env = RestClient.post(
         "#{@project_url}releases.json?environment_id=#{env['id']}",
         payload,
@@ -133,6 +132,4 @@ class BsRestApiHelper
       return nil
     end
   end
-
-
 end
