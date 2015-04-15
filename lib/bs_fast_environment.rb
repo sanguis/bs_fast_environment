@@ -104,8 +104,7 @@ class Bs_Fast_Envronment
         bs["#{key}"] = value
       end
     end
-    p bs
-    Beanstalk::API::Base.Setup(
+    Beanstalk::API::Base.setup(
       :domain   => bs['domain'],
       :login    => bs['login'],
       :password => bs['password']
