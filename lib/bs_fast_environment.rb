@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'securerandom'
-# require "beanstalkapp"
+require 'bs_rest_api_helper.rb'
+
 class Bs_Fast_Envronment
 
   def self.validate_options(options, operations)
@@ -113,11 +114,5 @@ class Bs_Fast_Envronment
         bs["#{key}"] = value
       end
     end
-    Beanstalk::API::Base.setup(
-      :domain   => bs['domain'],
-      :login    => bs['login'],
-      :password => bs['password']
-    )
-puts    Beanstalk::API::Account.find
   end
 end
