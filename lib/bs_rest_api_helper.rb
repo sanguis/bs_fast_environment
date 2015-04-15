@@ -66,6 +66,40 @@ class BsRestApiHelper
     end
   end
 
+  def server_environment_release(comment, environment_name, revision = nil)
+    env = get_server_environment(environment_name)
+    pp env
+    unless env.nil?
+      if revision.nil?
+        payload = {
+          'release' => {
+            'comment'  => comment,
+            'deploy_from_scratch' => false,
+          }
+        }
+      else
+        payload = {
+          'release' => {
+            'comment'  => comment,
+            'revision' => revision
+          }
+        }
+      end
+        p "#{@project_url}releases.json?environment_id=#{env['id']}"
+      new_env = RestClient.post(
+        "#{@project_url}releases.json?environment_id=#{env['id']}",
+        payload,
+        {
+          'Content-Type' => 'application/json'
+        }
+      )
+      new_env = JSON.parse(new_env)
+      return new_env['release_server']
+    else
+      return nil
+    end
+  end
+
   #returns a created server
   def create_server(server_name, environment_name, login, remote_addr, remote_path, shell_code = "")
     server = get_server(server_name, environment_name)
@@ -99,5 +133,6 @@ class BsRestApiHelper
       return nil
     end
   end
+
 
 end
