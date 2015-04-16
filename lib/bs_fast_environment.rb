@@ -14,17 +14,18 @@ class Bs_Fast_Envronment
     end
     @full_domain = "#{subdomain}.knectar.com"
     @options = options
+    @site_path = "#{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]}"
   end
 
   def self.mk_file_system(app='drupal')
-    FileUtils.mkdir_p "#{@options["sites_parent_dir"]}/#{@options["client"]}/#{@options["instance"]}/#{@options["files"]}"
+    FileUtils.mkdir_p "#{@site_path}/#{@options["files"]}"
     FileUtils.chown @options["app_owner"], @options["app_owner"], "#{@options["sites_parent_dir"]}/#{@options["client"]}"
-    FileUtils.chown_R @options["app_owner"], @options["app_owner"], "#{@options["sites_parent_dir"]}/#{@options["client"]}/#{@options["instance"]}"
+    FileUtils.chown_R @options["app_owner"], @options["app_owner"], "#{@site_path}"
     begin
-      FileUtils.chown_R @options["php_user"], @options["app_owner"], "#{@options["sites_parent_dir"]}/#{@options["client"]}/#{@options["instance"]}/#{@options["files"]}"
+      FileUtils.chown_R @options["php_user"], @options["app_owner"], "#{@site_path}/#{@options["files"]}"
     rescue
       puts "Can not change 'files' directory owner to #{@options["php_user"]}.\n Please enter sudoers password:"
-      system("sudo chown -R #{@options["php_user"]}:#{@options["app_owner"]} #{@options["sites_parent_dir"]}/#{@options["client"]}/#{@options["instance"]}/#{@options["files"]}")
+      system("sudo chown -R #{@options["php_user"]}:#{@options["app_owner"]} #{@site_path}/#{@options["files"]}")
     end
     puts "File system prepared"
   end
@@ -81,7 +82,7 @@ class Bs_Fast_Envronment
       puts "The value #{@options["php_version"]} is invalid. Please enter 5.3, 5.4 or 5.5 other @options will fail."
       exit
     end
-    puts "Creating the vhost file for http://#{full_domain}. It will run on the php socket #{php_socket}."
+    puts "Creating the vhost file for http://#{@full_domain}. It will run on the php socket #{php_socket}."
     
     # private files
     private_files = if @options["private_files"].nil?
@@ -94,11 +95,12 @@ class Bs_Fast_Envronment
 #the URL
   server_name #{subdomain}.knectar.com;
 #path to the local host
-  root #{@options["sites_parent_dir"]}/#{@options["client"]}/#{@options["instance"]};
+  root #{@site_path};
 #include the app template
   set $private_dir #{private_files};
   set $php_socket #{php_socket};
   include /etc/nginx/password.conf;
+  include /etc/nginx/cert.conf;
   include /etc/nginx/apps/drupal;
 }"
   end
@@ -108,12 +110,8 @@ class Bs_Fast_Envronment
   def self.bs_deploy_code() 
 require 'bs_rest_api_helper.rb'
    
-    bs= Hash.new
-    @options['beanstalkapp'].each do |k|
-      k.to_hash.each_pair do |key,value|
-        bs["#{key}"] = value
-      end
-    end
+    instance = RestClient.new(@options['beanstalkapp']['domain'], @options['beanstalkapp']['login'], @options['beanstalkapp']['password'], @options['client'])
 
+    
   end
 end
