@@ -137,6 +137,11 @@ class BsRestApiHelper
     return JSON.parse(RestClient.get "#{@url}repositories/#{@project_data['id']}/branches.json")
   end
   def has_branch(find_branch)
-    return find_branch().find {|i|i['branch'] == find_branch}
+    branch =  find_branches().find {|i|i['branch'] == find_branch}
+    if branch.nil?
+      return false
+    else
+      return true
+    end
   end
 end
