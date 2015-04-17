@@ -108,10 +108,21 @@ class Bs_Fast_Envronment
   # fork or detect existing branch by the name of @options["instance"] from default branch
   # deploy code in to newly created file system
   def self.bs_deploy_code() 
-require 'bs_rest_api_helper.rb'
-   
-    instance = RestClient.new(@options['beanstalkapp']['domain'], @options['beanstalkapp']['login'], @options['beanstalkapp']['password'], @options['client'])
+    require 'bs_rest_api_helper.rb'
 
-    
+    instance = RestClient.new(@options['beanstalkapp']['domain'], @options['beanstalkapp']['login'], @options['beanstalkapp']['password'], @options['client'])
+    mk_server = instance.create_server(@full_domain, @options['instance'], @options['remote_server']['login'], @options['remote_server']['remote_addr'], @site_path, @options['remote_server']['shell_code'])
+    unless mk_server.nil?
+      puts "Making Server and Deployment role if needed"
+        if instance.has_branch(@options['instance']).true? && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance'])
+          puts "Server Created and files are deploying"
+          
+        elseif instance.has_branch(@options['instance']).false? && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance']).nil?
+        ## todo get app to do its own fork.
+        puts  "Server Created but branch did not deploy as it does not exist yet please create it."
+        else
+          puts "Something went horribly wrong. No Deployment server or files were released"
+        end
+    end
   end
 end
