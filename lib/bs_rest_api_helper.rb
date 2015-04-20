@@ -92,7 +92,7 @@ class BsRestApiHelper
         }
       )
       new_env = JSON.parse(new_env)
-      return new_env['release_server']
+      return new_env['release']
     else
       return nil
     end

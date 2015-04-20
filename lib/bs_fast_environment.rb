@@ -75,7 +75,7 @@ class Bs_Fast_Envronment
       if instance.has_branch(@options['instance']) && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance'])
         puts "Server Created and files are deploying"
 
-        elseif instance.has_branch(@options['instance']).false? && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance']).nil?
+      elsif instance.has_branch(@options['instance']) ==  false && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance']).nil?
         ## todo get app to do its own fork.
         puts  "Server Created but branch did not deploy as it does not exist yet please create it."
       else
