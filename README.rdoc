@@ -9,17 +9,18 @@ It is a ruby gem the code base is at https://github.com/sanguis/bs_fast_environm
 * Create Drupal file structure
 * create db and provide unique access credentials. (Already returns a drush site-install url string
 * Create vhost file (and reload nginx)
-* todo: add stock enviroments and urls.
+* add stock enviroments and urls.
 * todo: If an old url is included it will also listen for that.
 * todo: Create new or clone , branch for instance
-* todo: Deployment
-* todo: create new role if needed
-* todo: create new server
-* todo: deploy files.
+* create new role if needed
+* create new server
+* deploy files.
 * todo: run drush site-install to populate settings.php. This tests base drupal functionality as a bonus.
+
 Future goals not in this phase.
 Include other app file and vhost installs
-Daniel and I have already  created an app template for magento but it currently is hard coded to drupal.
+
+Daniel and I have already created an app template for magento but it currently is hard coded to drupal.
 Auto fetch prod assets
 Create setup function.
 append custom vars to the drupal settings.php
