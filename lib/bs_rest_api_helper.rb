@@ -62,13 +62,12 @@ class BsRestApiHelper
         return {'server' => rel_server['release_server'], 'environment' => env }
       end
     else
-      return nil
+        return {'server' => nil, 'environment' => nil }
     end
   end
 
   def server_environment_release(comment, environment_name, revision = nil)
     env = get_server_environment(environment_name)
-    pp env
     unless env.nil?
       if revision.nil?
         payload = {
@@ -126,10 +125,10 @@ class BsRestApiHelper
         }
       )
         new_env = JSON.parse(new_env)
-        return new_env['release_server']
+        return {'status' => 'created', 'release_server' => new_env['release_server']}
         
     else
-      return nil
+        return {'status' => 'exists', 'release_server' => server['server']}
     end
   end
   def find_branches()

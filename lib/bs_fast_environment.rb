@@ -69,10 +69,10 @@ class Bs_Fast_Envronment
     rs = hash_extract(@options['remote_server'])
     require 'bs_rest_api_helper.rb'
     instance = BsRestApiHelper.new(bs['domain'], bs['login'], bs['password'], @options['client'])
-    mk_server = instance.create_server(@full_domain, @options['instance'], rs['login'], rs['remote_addr'], @site_path, @options['remote_server']['shell_code'])
+      mk_server = instance.create_server(@full_domain, @options['instance'], rs['login'], rs['remote_addr'], @site_path, @app_options['shell_code'])
     unless mk_server.nil?
       puts "Making Server and Deployment role if needed"
-      if instance.has_branch(@options['instance']).true? && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance'])
+      if instance.has_branch(@options['instance']) && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance'])
         puts "Server Created and files are deploying"
 
         elseif instance.has_branch(@options['instance']).false? && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance']).nil?
