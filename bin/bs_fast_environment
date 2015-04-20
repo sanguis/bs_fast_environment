@@ -108,5 +108,5 @@ if operations[:mk_vhost]
 end
 
 if operations[:setup_bs]
-  instance.bs_deploy_code()   
+  instance.bs_deploy_code
 end

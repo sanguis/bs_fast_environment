@@ -133,7 +133,6 @@ class BsRestApiHelper
     end
   end
   def find_branches()
-    p #{@project_url}repositories/#{@project_data['id']}/branches.json
     return JSON.parse(RestClient.get "#{@url}repositories/#{@project_data['id']}/branches.json")
   end
   def has_branch(find_branch)

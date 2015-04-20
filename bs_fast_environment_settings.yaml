@@ -7,6 +7,7 @@ mysql_user: root
 mysql_password:
 sites_parent_dir: /srv/www
 private_files:
+app: drupal
 beanstalkapp:
   - domain:
   - login:
@@ -16,3 +17,12 @@ system_options:
       - 5.3
       - 5.4
       - 5.5
+remote_server:
+  - login:
+  - remote_addr:
+apps:
+    - drupal:
+      - shell_code: 'wget https://raw.githubusercontent.com/sanguis/drupal-beanstalk-post-deployment-scripts/master/development.sh -O /tmp/%USER_NAME%-%REVISION%.sh
+bash /tmp/%USER_NAME%-%REVISION%.sh "%COMMENT%" %REVISION% %USER_NAME%'
+    - magento:
+      - shell_code:

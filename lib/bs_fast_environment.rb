@@ -15,6 +15,8 @@ class Bs_Fast_Envronment
     @full_domain = "#{subdomain}.knectar.com"
     @options = options
     @site_path = "#{options["sites_parent_dir"]}/#{options["client"]}/#{options["instance"]}"
+    apps = hash_extract(options['apps'])
+    @app_options = hash_extract(apps[options['app']])
   end
 
   def self.mk_file_system(app='drupal')
@@ -60,16 +62,38 @@ class Bs_Fast_Envronment
     puts "value for --db-url: mysql://#{new_db}:#{random_password}@localhost/#{new_db}"
   end
 
+  # fork or detect existing branch by the name of @options["instance"] from default branch
+  # deploy code in to newly created file system
+  def bs_deploy_code() 
+    bs = hash_extract(@options['beanstalkapp'])
+    rs = hash_extract(@options['remote_server'])
+    require 'bs_rest_api_helper.rb'
+    instance = BsRestApiHelper.new(bs['domain'], bs['login'], bs['password'], @options['client'])
+    mk_server = instance.create_server(@full_domain, @options['instance'], rs['login'], rs['remote_addr'], @site_path, @options['remote_server']['shell_code'])
+    unless mk_server.nil?
+      puts "Making Server and Deployment role if needed"
+      if instance.has_branch(@options['instance']).true? && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance'])
+        puts "Server Created and files are deploying"
+
+        elseif instance.has_branch(@options['instance']).false? && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance']).nil?
+        ## todo get app to do its own fork.
+        puts  "Server Created but branch did not deploy as it does not exist yet please create it."
+      else
+        puts "Something went horribly wrong. No Deployment server or files were released"
+      end
+    end
+  end
+  #creates vhost file,
   def self.mk_vhost(app = 'drupal')
 
     File.open("/etc/nginx/sites-enabled/#{@options["client"]}_#{@options["instance"]}", 'w+') do |f|
-      f.puts vhost_drupal(@options)
+      f.puts vhost_drupal()
     end
     system "sudo service nginx reload"
   end
 
-  def self.vhost_drupal()
-   
+
+  def vhost_drupal()
     # setting the php version;
     case @options["php_version"]
     when "5.3"
@@ -83,7 +107,7 @@ class Bs_Fast_Envronment
       exit
     end
     puts "Creating the vhost file for http://#{@full_domain}. It will run on the php socket #{php_socket}."
-    
+
     # private files
     private_files = if @options["private_files"].nil?
                       '""'
@@ -92,37 +116,28 @@ class Bs_Fast_Envronment
                     end
 
     return "server {
-#the URL
-  server_name #{subdomain}.knectar.com;
-#path to the local host
-  root #{@site_path};
-#include the app template
-  set $private_dir #{private_files};
-  set $php_socket #{php_socket};
-  include /etc/nginx/password.conf;
-  include /etc/nginx/cert.conf;
-  include /etc/nginx/apps/drupal;
-}"
+  #the URL
+    server_name #{@full_domain};
+  #path to the local host
+    root #{@site_path};
+  #include the app template
+    set $private_dir #{private_files};
+    set $php_socket #{php_socket};
+    include /etc/nginx/password.conf;
+    include /etc/nginx/cert.conf;
+    include /etc/nginx/apps/drupal;
+  }"
   end
-  
-  # fork or detect existing branch by the name of @options["instance"] from default branch
-  # deploy code in to newly created file system
-  def self.bs_deploy_code() 
-    require 'bs_rest_api_helper.rb'
 
-    instance = RestClient.new(@options['beanstalkapp']['domain'], @options['beanstalkapp']['login'], @options['beanstalkapp']['password'], @options['client'])
-    mk_server = instance.create_server(@full_domain, @options['instance'], @options['remote_server']['login'], @options['remote_server']['remote_addr'], @site_path, @options['remote_server']['shell_code'])
-    unless mk_server.nil?
-      puts "Making Server and Deployment role if needed"
-        if instance.has_branch(@options['instance']).true? && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance'])
-          puts "Server Created and files are deploying"
-          
-        elseif instance.has_branch(@options['instance']).false? && instance.server_environment_release("Initial deployment to #{@full_domain}", @options['instance']).nil?
-        ## todo get app to do its own fork.
-        puts  "Server Created but branch did not deploy as it does not exist yet please create it."
-        else
-          puts "Something went horribly wrong. No Deployment server or files were released"
-        end
+  # Extracts nested data within yaml generated @options hash
+  def hash_extract(a)
+    h = Hash.new
+    a.each do |k|
+      k.to_hash.each_pair do |key,value|
+        h["#{key}"] = value
+      end
     end
+    return h
   end
 end
+
