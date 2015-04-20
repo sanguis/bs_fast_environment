@@ -47,7 +47,7 @@ class Bs_Fast_Envronment
     puts "created database: #{new_db}"
     puts "created user:     #{new_db}"
     puts "password:         #{random_password}"
-    puts "value for --db-url: mysql://#{new_db}:#{random_password}@localhost/#{new_db}"
+    puts "value for --db-url=\"mysql://#{new_db}:#{random_password}@localhost/#{new_db}\""
   end
 
   def self.mk_vhost(options, app = 'drupal')
@@ -72,7 +72,7 @@ class Bs_Fast_Envronment
     # setting the php version;
     case options["php_version"]
     when "5.3"
-      php_socket = "php-fpm"
+      php_socket = "php53-fpm"
     when "5.4"
       php_socket = "php54-fpm"
     when "5.5"
@@ -114,6 +114,7 @@ class Bs_Fast_Envronment
       end
     end
     p bs
+    
     Beanstalk::API::Base.Setup(
       :domain   => bs['domain'],
       :login    => bs['login'],
