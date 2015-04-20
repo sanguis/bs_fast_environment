@@ -93,20 +93,20 @@ else
   options["client"] = ARGV.first
 end
 
-
+instance = Bs_Fast_Envronment.new(options)
 #run the actaul programs
 if operations[:mk_file_system]
-  Bs_Fast_Envronment.mk_file_system(options)
+  instance.mk_file_system()
 end  
 
 if operations[:mk_db]
-  Bs_Fast_Envronment.mk_db(options)
+  instance.mk_db()
 end
 
 if operations[:mk_vhost]
-  Bs_Fast_Envronment.mk_vhost(options)
+  instance.mk_vhost()
 end
 
 if operations[:setup_bs]
-  Bs_Fast_Envronment.bs_deploy_code(options)   
+  instance.bs_deploy_code
 end
