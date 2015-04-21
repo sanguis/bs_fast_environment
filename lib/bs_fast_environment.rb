@@ -19,7 +19,7 @@ class Bs_Fast_Envronment
     @app_options = hash_extract(apps[options['app']])
   end
 
-  def self.mk_file_system(app='drupal')
+  def mk_file_system()
     FileUtils.mkdir_p "#{@site_path}/#{@options["files"]}"
     FileUtils.chown @options["app_owner"], @options["app_owner"], "#{@options["sites_parent_dir"]}/#{@options["client"]}"
     FileUtils.chown_R @options["app_owner"], @options["app_owner"], "#{@site_path}"
@@ -32,7 +32,7 @@ class Bs_Fast_Envronment
     puts "File system prepared"
   end
 
-  def self.mk_db()
+  def mk_db()
     # making MySQL info
     require "sequel"
     random_password = SecureRandom.hex(20)
@@ -84,14 +84,12 @@ class Bs_Fast_Envronment
     end
   end
   #creates vhost file,
-  def self.mk_vhost(app = 'drupal')
-
+  def mk_vhost(app = 'drupal')
     File.open("/etc/nginx/sites-enabled/#{@options["client"]}_#{@options["instance"]}", 'w+') do |f|
       f.puts vhost_drupal()
     end
     system "sudo service nginx reload"
   end
-
 
   def vhost_drupal()
     # setting the php version;
@@ -136,5 +134,7 @@ class Bs_Fast_Envronment
       k.to_hash.each_pair do |key,value|
         h["#{key}"] = value
       end
+    end
+    return h
+  end
 end
-
