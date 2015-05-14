@@ -33,10 +33,15 @@ class Bs_Fast_Envronment
   end
 
   def mk_db()
+    #mysql username can not be longer than 16 characters.
+    if (@options["client"].bytesize + 4)
+      new_db = "#{@options["client"][0, 12].gsub(/-/,'_')}_#{@options["instance"][0,3]}"
+    else
+      new_db = "#{@options["client"].gsub(/-/,'_')}_#{@options["instance"][0,2]}"
+    end
     # making MySQL info
     require "sequel"
     random_password = SecureRandom.hex(20)
-    new_db = "#{@options["client"].gsub(/-/,'_')}_#{@options["instance"]}"
     if @options["mysql_password"] == nil
       print "What is the mysql #{@options["mysql_user"]}'s password? "
       sql_password = gets.chomp
