@@ -10,7 +10,7 @@ class BsRestApiHelper
     @project_data = project_data['repository']
     @project_url = "#{@url}#{@project_data['id']}/"
   end
- # basic connection test 
+ # basic connection test
   def connect
     return  @project_data
   end
@@ -25,7 +25,7 @@ class BsRestApiHelper
   end
 
   #create environment if missing
-  def create_server_environment(environment_name, automatic = FALSE, color = "label-blue")
+  def create_server_environment(environment_name, automatic = TRUE, color = "label-blue")
     unless self.get_server_environment(environment_name).nil?
       return nil
     else
@@ -126,7 +126,7 @@ class BsRestApiHelper
       )
         new_env = JSON.parse(new_env)
         return {'status' => 'created', 'release_server' => new_env['release_server']}
-        
+
     else
         return {'status' => 'exists', 'release_server' => server['server']}
     end
