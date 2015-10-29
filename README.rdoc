@@ -1,4 +1,5 @@
 = bs_fast_environment
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sanguis/bs_fast_environment/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sanguis/bs_fast_environment/?branch=master)
 
 == overview
 This is a cli tool that I have written to speed up the process of making and configuring a vhost/db/user and prepping the file system for drupal deployment
